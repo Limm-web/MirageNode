@@ -1,0 +1,8 @@
+MIRAGE-NODE take — align VO to these markers:
+[00:00] P1 HOOK slide
+[00:02] P2 ARCHITECTURE friction
+[00:07] P3 LIVE CONSOLE demo
+[01:10] P4 CAMPAIGN LEDGER + restart survival
+[02:44] P5 AGENT REGISTRY + model matrix
+[02:47] P6 skipped (--skip-cloud)
+[02:47] P7 CLOSE slide

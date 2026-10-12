@@ -1,0 +1,16 @@
+# Blokir dari upload Cloud Build (rahasia & artefak lokal TIDAK PERNAH naik ke GCP)
+.env
+.env.*
+.git/
+.gitignore
+node_modules/
+decoy_logs/
+*.log
+*.jsonl
+tmp_*
+_tmp_*
+campaign.local.jsonl
+threat_intel.local.jsonl
+README.md
+implementation_plan.md
+devpost_*.html

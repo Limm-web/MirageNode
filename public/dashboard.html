@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIRAGE-NODE — Deception Operations Ledger</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect x='4' y='4' width='88' height='88' rx='14' fill='%23161913'/%3E%3Cg fill='%23EEEEE8'%3E%3Crect x='23' y='29' width='6' height='38' rx='3'/%3E%3Crect x='35' y='29' width='6' height='38' rx='3'/%3E%3Crect x='47' y='29' width='6' height='38' rx='3'/%3E%3Crect x='59' y='29' width='6' height='38' rx='3'/%3E%3C/g%3E%3Cline x1='17' y1='73' x2='72' y2='21' stroke='%23B3261E' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ============ MIRAGE-NODE LEDGER CONSOLE ============
+   Palette: cold archive paper, ink, stamp red.
+   Mono carries all data; Sans carries only sentences. */
+:root{
+  --paper:#EEEEE8; --field:#E5E6DC; --ink:#161913;
+  --line:#CBCDBF;  --steel:#666B5C;
+  --signal:#B3261E; --safe:#275C49; --caution:#8A5A00;
+  --hover:#F7F7F1;
+  --mono:'IBM Plex Mono',ui-monospace,'Cascadia Mono',Consolas,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{color-scheme:light}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+     font-size:14px;line-height:1.45;min-height:100vh;padding-bottom:52px;cursor:default}
+
+/* ---- command strip ---- */
+.bar{background:var(--ink);color:var(--paper);
+     display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+     padding:10px 22px;font-family:var(--mono)}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:28px;height:28px;flex:none;display:block}
+.brand b{font-weight:600;letter-spacing:.22em;font-size:13px}
+.brand span{font-size:11px;color:#B9BCAE;letter-spacing:.04em}
+.bar .right{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:11px}
+.dot{width:7px;height:7px;background:#7FBF72;border-radius:50%;display:inline-block;
+     animation:pulse 2.4s ease-in-out infinite;margin-right:6px;vertical-align:1px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.bar a{color:#D8DACF;text-decoration:none;border-bottom:1px dotted #55584E;cursor:pointer}
+.bar a:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+
+/* ---- sheet ---- */
+.sheet{max-width:1180px;margin:0 auto;padding:30px 24px 20px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+         text-transform:uppercase;color:var(--steel)}
+h2{font-size:17px;font-weight:600;margin:4px 0 2px;letter-spacing:-.01em}
+.lede{color:var(--steel);font-size:12.5px;margin-bottom:14px}
+.summary{font-family:var(--mono);font-size:12px;color:var(--ink);
+         border-left:3px solid var(--ink);padding:2px 0 2px 10px;margin-bottom:12px}
+.summary b{font-weight:600}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;background:#F4F4EF;
+      border:1px solid var(--line)}
+th,td{text-align:left;padding:8px 11px;font-size:12px;vertical-align:top}
+th{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.14em;
+   text-transform:uppercase;color:var(--steel);
+   border-bottom:1px solid var(--ink);background:var(--field)}
+tbody tr{border-bottom:1px solid var(--line)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--hover)}
+.wrap{overflow-x:auto}
+.mono{font-family:var(--mono)}
+.dim{color:var(--steel)}
+.num{text-align:right;font-family:var(--mono)}
+
+/* tally marks: groups of five — the page's signature */
+.tally{display:inline-flex;gap:7px;vertical-align:-1px}
+.tg{position:relative;display:inline-flex;gap:2px;height:12px;min-width:8px}
+.tg i{display:block;width:2px;height:12px;background:var(--ink)}
+.tg.g5::after{content:'';position:absolute;left:-2px;right:-2px;top:4px;
+              height:0;border-top:2px solid var(--signal);
+              transform:rotate(-24deg)}
+.tally em{font-style:normal;font-family:var(--mono);font-size:10.5px;
+          color:var(--steel);margin-left:6px}
+
+.chip{display:inline-block;font-family:var(--mono);font-size:10.5px;
+      padding:0 6px;border:1px solid var(--line);background:var(--field);
+      border-radius:2px;margin:1px 3px 1px 0;color:var(--ink)}
+.chip.s{border-color:var(--signal);color:var(--signal)}
+.chip.k{border-color:var(--safe);color:var(--safe)}
+.chip.c{border-color:var(--caution);color:var(--caution)}
+
+/* the single bold accent: one stamp, nothing else shouts */
+.stamp{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;
+       letter-spacing:.16em;text-transform:uppercase;color:var(--signal);
+       border:2px solid var(--signal);padding:1px 7px;border-radius:2px;
+       transform:rotate(-3deg);margin-right:10px}
+
+.empty{color:var(--steel);font-style:normal;font-size:12.5px;padding:14px 11px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:30px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+footer.note{max-width:1180px;margin:26px auto 0;padding:0 24px;
+            font-size:11.5px;color:var(--steel)}
+
+/* bottom status bar */
+.status{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#AEB1A4;
+        font-family:var(--mono);font-size:11px;display:flex;gap:20px;
+        padding:6px 22px;z-index:5}
+.status .hash{margin-left:auto;color:var(--paper)}
+
+tr.enter{animation:enter .35s ease-out}
+@keyframes enter{from{opacity:0;transform:translateY(-3px)}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .dot{animation:none}
+  tr.enter{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 96 96" aria-label="MIRAGE-NODE logo">
+      <g transform="translate(3,-3)" opacity="0.22" fill="#EEEEE8">
+        <rect x="23" y="29" width="6" height="38" rx="3"/><rect x="35" y="29" width="6" height="38" rx="3"/>
+        <rect x="47" y="29" width="6" height="38" rx="3"/><rect x="59" y="29" width="6" height="38" rx="3"/>
+      </g>
+      <rect x="4" y="4" width="88" height="88" rx="14" fill="#161913"/>
+      <g fill="#EEEEE8">
+        <rect x="23" y="29" width="6" height="38" rx="3"/><rect x="35" y="29" width="6" height="38" rx="3"/>
+        <rect x="47" y="29" width="6" height="38" rx="3"/><rect x="59" y="29" width="6" height="38" rx="3"/>
+      </g>
+      <line x1="17" y1="73" x2="72" y2="21" stroke="#B3261E" stroke-width="7" stroke-linecap="round"/>
+    </svg>
+    <b>MIRAGE-NODE</b><span>deception gateway · operations ledger</span>
+  </div>
+  <div class="right">
+    <span>backend <b id="backend" class="mono">—</b></span>
+    <span><span class="dot"></span>live · refresh 5s</span>
+    <span id="clock" title="local time"></span>
+    <a href="/_mirage/agents">agent registry</a>
+  </div>
+</header>
+
+<main class="sheet">
+
+  <!-- HERO: weeks-long memory is this product's most characteristic thing -->
+  <section aria-labelledby="ledger-h">
+    <div class="eyebrow">Memory bank · no ttl</div>
+    <h2 id="ledger-h">Campaign ledger</h2>
+    <p class="lede">Attackers remembered across sessions and restarts. Each tally stroke group = five days known.</p>
+    <p class="summary" id="led-sum" aria-live="polite">loading…</p>
+    <div class="wrap">
+    <table>
+      <thead><tr>
+        <th scope="col">Attacker</th><th scope="col">Known</th>
+        <th scope="col" class="num">Events</th><th scope="col">Attack types</th>
+        <th scope="col">Decoy target</th><th scope="col" class="num">IP samples</th>
+      </tr></thead>
+      <tbody id="ledger"><tr><td colspan="6" class="empty">Loading campaigns from the memory bank…</td></tr></tbody>
+    </table>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section aria-labelledby="cap-h">
+      <div class="eyebrow"><span class="stamp">Caught</span>capture log</div>
+      <h2 id="cap-h">Attacker payloads</h2>
+      <p class="lede">Every row below was diverted into a honeypot; the full payload is kept as evidence.</p>
+      <div class="wrap">
+      <table>
+        <thead><tr><th scope="col">Time</th><th scope="col">Request</th>
+                    <th scope="col">Verdict</th><th scope="col" class="num">Conf</th></tr></thead>
+        <tbody id="caps"><tr><td colspan="4" class="empty">No captures yet — system standing by.</td></tr></tbody>
+      </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="trc-h">
+      <div class="eyebrow">Observability · decision chain</div>
+      <h2 id="trc-h">Decision trace</h2>
+      <p class="lede">Why each request was routed where it went — auditable per request.</p>
+      <div class="wrap">
+      <table>
+        <thead><tr><th scope="col">Trace</th><th scope="col">Decision</th>
+                    <th scope="col">Via</th><th scope="col" class="num">ms</th></tr></thead>
+        <tbody id="traces"><tr><td colspan="4" class="empty">No routing decisions recorded yet.</td></tr></tbody>
+      </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="note">This ledger is backed by the no-TTL memory bank; the operational blacklist stays TTL-bound so shared NAT addresses are not punished forever. Full catalog: <span class="mono">/_mirage/agents</span>.</footer>
+
+<div class="status">
+  <span>source GET /_mirage/intel · refreshed every 5s</span>
+  <span class="hash" id="hashpeek"></span>
+</div>
+
+<script>
+// The page token (?token=X) is forwarded on every fetch so protected mode never 401s.
+const AUTH_QS = window.location.search || '';
+const $ = (id) => document.getElementById(id);
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);}
+function timeOf(v){const d=new Date(typeof v==='number'?v:v);return isNaN(d)?'—':d.toLocaleTimeString('en-GB');}
+function dateOf(iso){const d=new Date(iso);return isNaN(d)?'—':d.toISOString().slice(0,10);}
+
+/* tally marks: one group = five days; remainder drawn as-is */
+function tally(days){
+  const d=Math.min(Math.floor(days),30);
+  if(d<1)return'<em>&lt;1 day</em>';
+  let h='',full=Math.floor(d/5),rem=d%5;
+  for(let g=0;g<full&&g<6;g++)h+='<span class="tg g5"><i></i><i></i><i></i><i></i></span>';
+  if(full>6)return h+'<em>'+d+' days</em>';
+  if(rem){let r='<span class="tg">';for(let k=0;k<rem;k++)r+='<i></i>';r+='</span>';h+=r;}
+  return h+'<em>'+d+'d</em>';
+}
+function chips(obj,cls){
+  const e=Object.entries(obj||{}).sort((a,b)=>b[1]-a[1]);
+  return e.length?e.map(([k,n])=>`<span class="chip ${cls||''}" title="${n}×">${esc(k)}</span>`).join(''):'<span class="dim">—</span>';
+}
+
+async function load(){
+  try{
+    const r=await fetch('/_mirage/intel'+AUTH_QS);
+    const d=await r.json();
+
+    $('backend').textContent=d.backend||'—';
+
+    /* --- campaign ledger --- */
+    const list=Array.isArray(d.campaignList)?d.campaignList:[];
+    const c=d.campaigns||{};
+    $('led-sum').innerHTML=`<b>${list.length}</b> top campaigns · `+
+      `<b>${c.totalEvents??'—'}</b> total events · `+
+      `<b>${c.returningHunters??0}</b> repeat offenders`;
+    const tb=$('ledger');
+    tb.innerHTML=list.length?'':'<tr><td colspan="6" class="empty">The ledger is empty — every attack from now on will be recorded here permanently.</td></tr>';
+    list.forEach((x,i)=>{
+      const tr=document.createElement('tr');
+      if(i===0)tr.className='enter';
+      const full=x.key||'-';
+      tr.dataset.hash=full.startsWith('fp:')?full.slice(0,-1):full;
+      tr.innerHTML=
+        `<td class="mono">${esc(x.key)}</td>`+
+        `<td>${tally(x.spanDays||0)}<div class="dim mono" style="font-size:10.5px">${dateOf(x.firstSeen)} → ${dateOf(x.lastSeen)}</div></td>`+
+        `<td class="num"><b>${x.events??0}</b></td>`+
+        `<td>${chips(x.attackTypes,'s')}</td>`+
+        `<td>${chips(x.profiles)}</td>`+
+        `<td class="num">${x.ipSamples??0}</td>`;
+      tr.addEventListener('mouseenter',()=>{$('hashpeek').textContent='fp '+tr.dataset.hash+'…';});
+      tb.appendChild(tr);
+    });
+
+    /* --- capture log --- */
+    const t=Array.isArray(d.threats)?d.threats:[];
+    const cb=$('caps');
+    cb.innerHTML=t.length?'':'<tr><td colspan="4" class="empty">No captures yet — system standing by.</td></tr>';
+    for(const x of t){
+      const atk=(x.verdict&&x.verdict.attack_type)||x.attack_type||'unknown';
+      const conf=x.verdict&&x.verdict.confidence!=null?x.verdict.confidence:'—';
+      const el=document.createElement('tr');
+      el.innerHTML=
+        `<td class="dim mono">${esc(timeOf(x.recordedAt||x.timestamp))}</td>`+
+        `<td class="mono">${esc((x.method||'GET')+' '+x.url)}</td>`+
+        `<td><span class="chip s">${esc(atk)}</span></td>`+
+        `<td class="num dim">${esc(conf)}</td>`;
+      cb.appendChild(el);
+    }
+
+    /* --- decision trace --- */
+    const CLS={decoy:'s','decoy-posthoc':'s',production:'k','production-posthoc':'k',rejected:'c'};
+    const tr2=Array.isArray(d.traces)?d.traces:[];
+    const rb=$('traces');
+    rb.innerHTML=tr2.length?'':'<tr><td colspan="4" class="empty">No routing decisions recorded yet.</td></tr>';
+    for(const x of tr2){
+      const chain=Array.isArray(x.chain)?x.chain.join(' → '):'';
+      const el=document.createElement('tr');
+      el.title=(x.reason||'')+(chain?'\n'+chain:'');
+      el.innerHTML=
+        `<td class="mono dim">#${esc(x.traceId||'-')} ${esc(timeOf(x.ts))}</td>`+
+        `<td><span class="chip ${CLS[x.decision]||''}">${esc(x.decision||'-')}</span></td>`+
+        `<td class="dim">${esc(String(x.via||'—').toUpperCase())}</td>`+
+        `<td class="num dim">${x.latencyMs!=null?x.latencyMs:'—'}</td>`;
+      rb.appendChild(el);
+    }
+  }catch(e){
+    $('ledger').innerHTML='<tr><td colspan="6" class="empty">Failed to load intel: '+esc(e.message)+'</td></tr>';
+  }
+}
+
+setInterval(()=>{$('clock').textContent=new Date().toLocaleTimeString('en-GB');},1000);
+$('clock').textContent=new Date().toLocaleTimeString('en-GB');
+load();
+setInterval(load,5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Rahasia tidak pernah masuk image
+.env
+.env.*
+*.key
+
+# Artefak runtime & log
+node_modules
+*.log
+decoy_logs
+threat_intel.local.jsonl
+attacker_payloads*
+
+# Pengembangan & dokumen
+tests
+devpost_*.html
+.git
+.gitignore

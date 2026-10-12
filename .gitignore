@@ -1,0 +1,37 @@
+# ===== MIRAGE-NODE =====
+# Kredensial - JANGAN PERNAH commit
+.env
+.env.*
+*.key
+*.pem
+service-account*.json
+credentials*.json
+
+# [P0 SECURITY] Artefak forensik curl (--trace-ascii merekam header API key!)
+tests/*.txt
+*.trace
+
+# Dependencies
+node_modules/
+
+# Log & artefak runtime
+*.log
+attacker_payloads.log
+gateway_debug.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+devpost_*.html
+check_out*.txt
+tmp_boot_logs/
+# Snapshot Memory Bank (regenerable)
+campaign.local.jsonl
+
+# Artefak intel runtime (regenerable oleh gateway saat demo)
+decoy_logs/
+threat_intel.local.jsonl
+ 
+# Scrap Devpost lokal & hasil integrasi sementara 
+tmp_*.html 
+tmp_integration_result.txt

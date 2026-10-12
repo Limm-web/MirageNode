@@ -1,0 +1,11 @@
+# Normalisasi line-ending: repo lintas-platform (Windows dev, Linux Cloud Run)
+* text=auto eol=lf
+
+# Aset biner — jangan pernah disentuh normalisasi
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

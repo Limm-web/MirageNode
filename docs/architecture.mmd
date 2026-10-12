@@ -1,0 +1,58 @@
+%%{init: {'theme':'base','themeVariables':{
+  'background':'#F7F7F1',
+  'primaryColor':'#E5E6DC','primaryTextColor':'#161913','primaryBorderColor':'#161913',
+  'secondaryColor':'#EEEEE8','tertiaryColor':'#F4F4EF',
+  'lineColor':'#8A8F7D','textColor':'#161913',
+  'fontFamily':'IBM Plex Mono, Consolas, monospace','fontSize':'15px'
+},'flowchart':{'curve':'basis','nodeSpacing':28,'rankSpacing':44}}}%%
+flowchart LR
+  subgraph EDGE["incoming traffic"]
+    direction TB
+    U["normal user"]
+    A["attacker"]
+  end
+
+  GW["MIRAGE-NODE GATEWAY<br/>routing · policy · rate-limit<br/>anti economic-DoS"]
+
+  subgraph AGENTS["gemini agents"]
+    direction TB
+    S["SENTINEL<br/>key × model matrix<br/>3.5-flash → 3.6 → 3.7"]
+    AR["ARCHITECT<br/>decoy selection & spawn"]
+    PF["PERSONA FORGE<br/>&lt;ATTACKER_HISTORY&gt;<br/>history-adapted persona"]
+  end
+
+  MB[("CAMPAIGN MEMORY BANK<br/>no TTL · weeks-long context")]
+  BL[("BLACKLIST<br/>TTL-bounded · fair NAT")]
+  TI[("THREAT INTEL<br/>TTP evidence")]
+
+  subgraph SANDBOX["hardened sandbox · honeynet"]
+    D["DECOY CONTAINER<br/>wordpress | api | generic<br/>cap-drop ALL · read-only"]
+  end
+
+  P["PRODUCTION SERVER"]
+  V[("decoy_logs/<br/>forensic payloads")]
+  FS[("Firestore<br/>asia-southeast2")]
+
+  U -->|"HTTP"| GW
+  A -->|"attack"| GW
+  GW <-->|"check · write"| BL
+  GW -->|"new request"| S
+  S -->|"BENIGN"| P
+  S -->|"MALICIOUS"| GW
+  S -.->|"matrix exhausted"| H["local heuristics<br/>degraded mode"]
+  S -->|"profile + verdict"| AR
+  MB -.->|"attacker history"| PF
+  AR -->|"spawn / reuse"| D
+  PF -->|"persona"| D
+  GW -->|"divert attacker"| D
+  D -->|"payload capture"| V
+  AR -->|"campaign event"| MB
+  D -->|"TTP report"| TI
+  MB --- FS
+  TI --- FS
+  BL --- FS
+
+  style MB fill:#B3261E,color:#FFFFFF,stroke:#161913
+  style TI fill:#275C49,color:#FFFFFF,stroke:#161913
+  style D fill:#161913,color:#EEEEE8,stroke:#B3261E
+  style S fill:#EEEEE8,stroke:#161913,stroke-width:2px

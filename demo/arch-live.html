@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>MIRAGE-NODE ARCHITECTURE</title>
+<style>
+ html,body{margin:0;width:1920px;height:1080px;background:#10130E;overflow:hidden;
+   font-family:Consolas,'Cascadia Mono',monospace}
+ #c{position:relative;width:1920px;height:1080px}
+ svg.w{position:absolute;inset:0}
+ .n{position:absolute;padding:22px 30px;border:6px solid #161913;border-radius:16px;
+    background:#E5E6DC;color:#161913;font-size:30px;line-height:1.35;text-align:center}
+ .n b{font-size:34px;letter-spacing:2px;display:block;margin-bottom:8px}
+ .n.red{background:#B3261E;color:#fff}
+ .n.grn{background:#275C49;color:#fff}
+ .n.drk{background:#161913;color:#EEEEE8;border-color:#B3261E;font-size:28px}
+ .n small{display:block;font-size:24px;color:#666B5C;margin-top:6px}
+ .n.drk small,.n.red small,.n.grn small{color:rgba(255,255,255,.75)}
+ .lbl{position:absolute;color:#AEB1A4;font-size:26px}
+</style></head>
+<body><div id="c">
+
+<svg class="w" width="1920" height="1080" viewBox="0 0 1920 1080">
+ <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+   <path d="M0,0 L9,3 L0,6 z" fill="#8A8F7D"/></marker></defs>
+ <line x1="240" y1="400" x2="520" y2="470" stroke="#8A8F7D" stroke-width="5" marker-end="url(#ar)"/>
+ <line x1="240" y1="650" x2="520" y2="540" stroke="#B3261E" stroke-width="5" stroke-dasharray="18 12" marker-end="url(#ar)"/>
+ <line x1="800" y1="480" x2="1120" y2="300" stroke="#8A8F7D" stroke-width="5" marker-end="url(#ar)"/>
+ <line x1="800" y1="560" x2="1120" y2="600" stroke="#8A8F7D" stroke-width="5" marker-end="url(#ar)"/>
+ <line x1="1180" y1="330" x2="1560" y2="330" stroke="#275C49" stroke-width="5" marker-end="url(#ar)"/>
+ <line x1="1230" y1="700" x2="1470" y2="720" stroke="#8A8F7D" stroke-width="5" marker-end="url(#ar)"/>
+ <line x1="1140" y1="640" x2="900" y2="780" stroke="#B3261E" stroke-width="5" stroke-dasharray="18 12" marker-end="url(#ar)"/>
+ <line x1="640" y1="850" x2="640" y2="640" stroke="#8A8F7D" stroke-width="4" stroke-dasharray="10 10"/>
+ <text x="600" y="620" fill="#666B5C" font-size="26">weeks-long</text>
+ <text x="380" y="380" fill="#666B5C" font-size="26">benign</text>
+ <text x="360" y="640" fill="#B3261E" font-size="26">attack</text>
+</svg>
+
+<div class="n" style="left:60px;top:340px;width:220px">👤 NORMAL USER<small>benign traffic</small></div>
+<div class="n drk" style="left:60px;top:590px;width:220px">😈 ATTACKER<small>rotating IPs</small></div>
+
+<div class="n" style="left:530px;top:420px;width:280px"><b>GATEWAY</b>routing · policy<br/>rate-limit · anti-DoS</div>
+
+<div class="n" style="left:1130px;top:230px;width:430px"><b>SENTINEL</b>key × model matrix<br/>gemini-3.5-flash → 3.6 → 3.7<small>SDK ▸ REST ▸ heuristics fallback</small></div>
+<div class="n" style="left:1130px;top:540px;width:430px"><b>ARCHITECT</b>decoy selection &amp; spawn<br/><small>wordpress | api | generic</small></div>
+<div class="n" style="left:1105px;top:690px;width:400px"><b>PERSONA FORGE</b>&lt;ATTACKER_HISTORY&gt;<br/>history-adapted personality</div>
+
+<div class="n red" style="left:420px;top:770px;width:440px"><b>CAMPAIGN MEMORY BANK</b>no TTL · weeks-long context<small>fingerprint hash · bounded aggregates</small></div>
+
+<div class="n drk" style="left:1480px;top:640px;width:380px"><b>DECOY CONTAINER</b>hardened sandbox<br/>cap-drop ALL · read-only<br/><small>captures every payload</small></div>
+
+<div class="n grn" style="left:1560px;top:270px;width:300px"><b>PRODUCTION</b>real server untouched</div>
+
+<div class="n" style="left:880px;top:880px;width:520px"><b>THREAT INTEL</b>TTP evidence → Firestore<br/><small>asia-southeast2</small></div>
+
+<div class="n" style="left:1500px;top:880px;width:360px"><b>FIRESTORE</b>campaign · blacklist · intel</div>
+
+<div class="lbl" style="left:560px;top:120px">decoy_logs/ forensic payloads</div>
+
+</div></body></html>

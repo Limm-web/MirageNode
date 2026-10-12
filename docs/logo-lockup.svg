@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 120" width="620" height="120">
+  <!-- MIRAGE-NODE horizontal lockup (light backgrounds) -->
+  <g transform="translate(0,0) scale(1.15)">
+    <rect x="4" y="4" width="88" height="88" rx="14" fill="#161913"/>
+    <g transform="translate(3,-3)" opacity="0.22">
+      <rect x="23" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+      <rect x="35" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+      <rect x="47" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+      <rect x="59" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+    </g>
+    <rect x="23" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+    <rect x="35" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+    <rect x="47" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+    <rect x="59" y="29" width="6" height="38" rx="3" fill="#EEEEE8"/>
+    <line x1="17" y1="73" x2="72" y2="21" stroke="#B3261E" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="130" y="58" font-family="'IBM Plex Mono','Cascadia Mono',Consolas,monospace"
+        font-size="34" font-weight="600" letter-spacing="7" fill="#161913">MIRAGE-NODE</text>
+  <text x="132" y="88" font-family="'IBM Plex Mono','Cascadia Mono',Consolas,monospace"
+        font-size="14" letter-spacing="5.5" fill="#666B5C">AGENTIC DECEPTION GATEWAY</text>
+</svg>

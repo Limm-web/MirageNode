@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MIRAGE-NODE :: FLOW CAM</title>
+<style>
+ html,body{margin:0;height:100%;background:#10130E;overflow:hidden}
+ #wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+ #a{width:100vw;transition:transform 1.1s cubic-bezier(.45,0,.2,1);transform-origin:center center}
+</style>
+</head>
+<body>
+<div id="wrap"><img id="a" src="../docs/architecture.png" alt="architecture"></div>
+<script>
+/* stops: [key, centerX% of IMAGE, zoom] — camera pans left->right following the attack */
+const STOPS=[
+ ['1', 10, 3.0],
+ ['2', 24, 3.0],
+ ['3', 36, 3.0],
+ ['4', 48, 3.0],
+ ['5', 60, 3.0],
+ ['6', 72, 3.0],
+ ['7', 86, 3.0],
+ ['0', 50, 1.0]
+];
+const a=document.getElementById('a');
+function go(k){
+ const s=STOPS.find(x=>x[0]===k); if(!s)return;
+ const[,cx,z]=s;
+ a.style.transformOrigin=cx+'% 50%';
+ a.style.transform='scale('+z+')';
+}
+addEventListener('keydown',e=>go(e.key));
+go('0');
+</script>
+</body></html>

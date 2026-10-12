@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MIRAGE-NODE :: LIVE CONSOLE</title>
+<style>
+  :root{--ink:#161913;--paper:#EEEEE8;--steel:#8A8F7D;--signal:#B3261E}
+  body{margin:0;background:var(--ink);color:#D9DBCE;font-family:'Cascadia Mono',Consolas,monospace;
+       font-size:16px;line-height:1.5;height:100vh;display:flex;flex-direction:column}
+  header{padding:10px 18px;border-bottom:1px solid #2A2E24;color:var(--paper);
+         letter-spacing:.25em;font-size:13px;display:flex;gap:14px;align-items:center}
+  .dot{width:8px;height:8px;border-radius:50%;background:#7FBF72;animation:p 1.6s infinite}
+  @keyframes p{50%{opacity:.3}}
+  #term{flex:1;overflow-y:auto;padding:14px 20px;white-space:pre-wrap;word-break:break-all}
+  .cmd{color:#fff;background:#23271F;display:block;padding:1px 0}
+  .ok{color:#9CC79A}.err{color:#E08A80}.dim{color:#6E7364}
+  #row{display:flex;border-top:1px solid #2A2E24}
+  #prompt{padding:10px 0 10px 18px;color:#7FBF72}
+  #cmd{flex:1;background:transparent;border:none;outline:none;color:#fff;
+       font:inherit;padding:10px 12px 10px 4px}
+</style>
+</head>
+<body>
+<header><span class="dot"></span><span id="ttl">MIRAGE-NODE · LIVE CONSOLE</span></header>
+<div id="term"><div class="dim">mirage-node operations console — real process output only</div></div>
+<div id="row"><span id="prompt">PS D:\MirageNode&gt;</span>
+<input id="cmd" autocomplete="off" spellcheck="false" placeholder="type a demo command and press Enter…"></div>
+
+<script>
+const Q=new URLSearchParams(location.search);
+const CH=Q.get('ch')||'gw';
+document.getElementById('ttl').textContent='MIRAGE-NODE · '+(CH==='gw'?'GATEWAY CONSOLE':'ATTACKER TERMINAL')+' ['+CH+']';
+const term=document.getElementById('term'),input=document.getElementById('cmd');
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function add(cls,text){const d=document.createElement('div');d.className=cls;d.innerHTML=esc(text);
+  term.appendChild(d);while(term.children.length>600)term.removeChild(term.firstChild);term.scrollTop=term.scrollHeight;}
+const es=new EventSource('/events?ch='+CH);
+es.onmessage=e=>{try{const m=JSON.parse(e.data);if(m.ch&&m.ch!==CH)return;add(m.type||'log',m.text);}catch(_){}};
+input.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  const t=input.value.trim(); if(!t)return;
+  input.value='';
+  fetch('/run?ch='+encodeURIComponent(CH)+'&text='+encodeURIComponent(t));
+});
+</script>
+</body></html>

@@ -1,0 +1,45 @@
+{
+  "name": "miragenode",
+  "version": "1.0.0",
+  "description": "MIRAGE-NODE :: Agentic Deception Gateway - honeypot otonom yang dikelola agen Gemini.",
+  "main": "src/gateway/gateway.js",
+  "scripts": {
+    "start": "node src/gateway/gateway.js",
+    "start:prod": "node src/prod_server.js",
+    "test": "node tests/e2e_wargame.js",
+    "test:unit": "node --test tests/unit.test.js",
+    "clean": "node scripts/clean.js",
+    "smoke": "node tests/smoke_key.js",
+    "verify:sentinel": "node tests/live_sentinel_check.js",
+    "deploy": "bash deploy_cloudrun.sh",
+    "test:integration": "node tests/integration_check.js"
+  },
+  "keywords": [
+    "honeypot",
+    "deception",
+    "agentic",
+    "gemini",
+    "cybersecurity",
+    "google-cloud"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^9.0.0",
+    "@google/genai": "^2.18.0",
+    "axios": "^1.19.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "http-proxy": "^1.18.1"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
